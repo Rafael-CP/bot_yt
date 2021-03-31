@@ -28,6 +28,7 @@ namespace bot_YT
                     {
                         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                         btn_AD = driver.FindElement(By.XPath("//*[@id='ad-text:7']"));
+                        Console.WriteLine("Skipa AD");  
                         btn_AD.Click();
                     }
                     catch (NoSuchElementException ex)
@@ -41,8 +42,8 @@ namespace bot_YT
             }
             finally
             {
-                Console.WriteLine("Assite por 30 seg");
-                Thread.Sleep(TimeSpan.FromSeconds(30));
+                Console.WriteLine("Assiste por 40 seg");
+                Thread.Sleep(TimeSpan.FromSeconds(40));
                 driver.Close();
                 driver.Dispose();
             }
