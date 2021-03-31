@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions; // para usar o teclado sem nenhum input
 
 
 namespace bot_YT
@@ -16,29 +17,23 @@ namespace bot_YT
             {
                 Console.WriteLine("Abre a url e espera");
                 driver.Navigate().GoToUrl(ConfigurationManager.AppSettings["link"]);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
                 Console.WriteLine("Da play no video");
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-                driver.FindElement(By.XPath("//*[@id='movie_player']/div[5]/button")).Click();
-
+                new Actions(driver).SendKeys("k").Perform(); // Aperta tecla K para dar play no video
+                                                             // isso evita casos de xpath diferentes no botao play
                 Console.WriteLine("Verifica Anuncio");               
                 IWebElement btn_AD = null;
-
                     try
                     {
                         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                         btn_AD = driver.FindElement(By.XPath("//*[@id='ad-text:7']"));
                         btn_AD.Click();
-
-                        Console.WriteLine("Assite por 30 seg");
-                        Thread.Sleep(TimeSpan.FromSeconds(30));
                     }
                     catch (NoSuchElementException ex)
                     {
-
-                        throw;
+                        Console.WriteLine(ex.ToString());       
                     }
-                                  
             }
             catch (Exception ex)
             {
@@ -46,6 +41,8 @@ namespace bot_YT
             }
             finally
             {
+                Console.WriteLine("Assite por 30 seg");
+                Thread.Sleep(TimeSpan.FromSeconds(30));
                 driver.Close();
                 driver.Dispose();
             }
